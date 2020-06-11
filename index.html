@@ -16,37 +16,58 @@
     <div class="center"><p>Waiting for host...</p></div>
     <script>
       const socket = io();
-      let startTime = 0;
 
-      // Welcome Player
-      let playerName = prompt("What's your name?");
-      document.getElementById("welcome").innerText = `Hello, ${playerName} 👋`;
-      socket.emit("playerJoined", playerName);
+      const state = {
+        playerName: '',
+        unlockedTimestamp: 0,
+        buttonUnlocked: false
+      };
+
+      const render = {
+        welcome: () => {
+          document.getElementById("welcome").innerText = `Hello, ${state.playerName} 👋`;
+        },
+        button: () => {
+          document.querySelector(".center").innerHTML =
+            `<button ${state.buttonUnlocked ? '': 'disabled'} onclick="buzz()" id="buzzer"></button>`;
+        }
+      }
 
       // Show the Button
       socket.on("unlockButton", () => {
-        startTime = Date.now();
-        document.querySelector(".center").innerHTML =
-          '<button onclick="buzz()" id="buzzer"></button>';
+        state.unlockedTimestamp = Date.now();
+        state.buttonUnlocked = true;
+        render.button();
       });
 
+      // Welcome Player
+      function join() {
+        state.playerName = prompt("What's your name?");      
+        socket.emit("playerJoined", state.playerName);
+        render.welcome();
+      }
+
       function buzz() {
-        let endTime = Date.now();
+        const response = {
+          [state.playerName]: Date.now() - state.unlockedTimestamp
+        };
         playSound();
-
         // Send time taken to express!
-        let response = {};
-        response[playerName] = endTime - startTime;
         socket.emit("buzzed", response);
-
         // Disable the button
-        document.getElementById("buzzer").setAttribute("disabled", "disabled");
+        state.buttonUnlocked = false;
+        render.button();
       }
 
       function playSound() {
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
       }
+
+      join()
+
+      window.state = state;
+      window.render = render;
     </script>
   </body>
 </html>
