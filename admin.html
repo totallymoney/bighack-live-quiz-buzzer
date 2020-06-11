@@ -12,12 +12,12 @@
   </head>
   <body>
     <div class="center">
-      <div onclick="buzz()" id="buzzer">🔓</div>
+      <button onclick="buzz()" id="buzzer">Start</button>
     </div>
     <script>
       const socket = io();
       function buzz() {
-        // document.getElementById("buzzer").setAttribute("disabled", "disabled");
+        document.getElementById("buzzer").setAttribute("disabled", "disabled");
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
         socket.emit("unlock");

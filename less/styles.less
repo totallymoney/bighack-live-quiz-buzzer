@@ -37,6 +37,7 @@ body {
   background: @color;
   color: @white;
   user-select: none;
+  border: 0;
 
   background-image: -webkit-gradient(
     linear,
@@ -56,10 +57,12 @@ body {
 
   box-shadow: 0 @dropSize @dropColor;
 
-  &:active {
+  &:active,
+  &:disabled {
     box-shadow: 0 0 @dropColor;
     .translate(0px, @dropSize);
     .transition( 0.1s all ease-out);
+    outline: 0;
   }
 }
 
