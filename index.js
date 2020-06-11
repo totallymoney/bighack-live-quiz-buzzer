@@ -22,7 +22,7 @@ io.on("connection", (socket) => {
   socket.on(`buzzed`, (player) => {
     console.log("A player buzzed! ⛑ :" + JSON.stringify(player));
     playerScores.push(player);
-    io.emit(`updateScored`);
+    io.emit(`updateScores`);
   });
 });
 
