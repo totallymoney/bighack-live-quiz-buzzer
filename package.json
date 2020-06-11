@@ -1,0 +1,8 @@
+{
+  "name": "Live Quiz Buzzer",
+  "version": "0.0.1",
+  "description": "TM Hackathon Winner!",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
