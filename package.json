@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "TM Hackathon Winner!",
   "dependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "express-less": "^0.1.0",
+    "nodemon": "^2.0.4"
   }
 }
