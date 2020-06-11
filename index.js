@@ -12,8 +12,18 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+let totalPlayers = 0;
 io.on("connection", (socket) => {
-  console.log("a played connected 🤽‍♀️");
+  console.log(`a played connected 🤽‍♀️`);
+  totalPlayers++;
+  socket.on("disconnect", () => {
+    totalPlayers--;
+    console.log(`a player disconnected`);
+  });
+
+  io.emit(`playerCount`, {
+    totalPlayers,
+  });
 });
 
 http.listen(3000, () => {
