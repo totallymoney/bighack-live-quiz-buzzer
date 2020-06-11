@@ -13,6 +13,7 @@
       function buzz() {
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
+        socket.emit("unlock");
       }
     </script>
   </body>

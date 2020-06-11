@@ -21,6 +21,11 @@ io.on("connection", (socket) => {
     console.log(`a player disconnected`);
   });
 
+  socket.on(`unlock`, (msg) => {
+    console.log("🔓");
+    io.emit(`unlockButton`);
+  });
+
   io.emit(`playerCount`, {
     totalPlayers,
   });
