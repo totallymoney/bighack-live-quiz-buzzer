@@ -12,29 +12,20 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-let totalPlayers = 0;
+let players = [];
 io.on("connection", (socket) => {
-  console.log(`a played connected 🤽‍♀️`);
-  totalPlayers++;
-  updateClientsAboutPlayerCount(io, totalPlayers);
-  socket.on("disconnect", () => {
-    totalPlayers--;
-    console.log(`a player disconnected`);
-    updateClientsAboutPlayerCount(io, totalPlayers);
-  });
-
   socket.on(`unlock`, (msg) => {
     console.log("🔓");
     io.emit(`unlockButton`);
   });
-});
 
-http.listen(3000, () => {
-  console.log("👂 on *:3000 🚀 🚀 🚀");
-});
-
-const updateClientsAboutPlayerCount = (io, totalPlayers) => {
-  io.emit(`playerCount`, {
-    totalPlayers,
+  socket.on(`playerJoined`, (player) => {
+    console.log("A played connected 🤽‍♀️ :" + player);
+    players.push(player);
+    io.emit(`updatePlayers`, players);
   });
-};
+});
+
+http.listen(8080, () => {
+  console.log("👂 on *:8080 🚀 🚀 🚀");
+});

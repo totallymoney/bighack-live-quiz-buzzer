@@ -1,16 +1,58 @@
 @size: 200px;
 @dropSize: 15px;
-@color: #f74d4d;
-@color2: #f86569;
-@dropColor: #e24f4f;
+@color: #ff4365;
+@color2: #ff5d7a;
+@dropColor: #ff2a50;
 @white: #fff;
+@black: #030301;
+@radicalred: #ff4365;
 
 body {
-  background: #333;
+  background: @black;
+  color: @white;
 
   h1,
   p {
     color: @white;
+  }
+  footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    line-height: 3;
+    overflow: hidden;
+    border-radius: 0.25em;
+  }
+  select {
+    flex: 1;
+    padding: 0 0.5em;
+    cursor: pointer;
+    background: none;
+    color: @white;
+    border: 0;
+  }
+  .select::before {
+    content: "\25b2";
+    position: absolute;
+    color: @radicalred;
+    background: @black;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: 0.25s all ease;
+    -o-transition: 0.25s all ease;
+    transition: 0.25s all ease;
   }
 
   .center {
@@ -37,6 +79,7 @@ body {
   background: @color;
   color: @white;
   user-select: none;
+  outline: 0;
   border: 0;
 
   background-image: -webkit-gradient(

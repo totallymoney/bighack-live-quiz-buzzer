@@ -11,23 +11,20 @@
     <link rel="stylesheet" href="/less-css/styles.css" />
   </head>
   <body>
-    <p id="players">Connected</p>
     <div class="center">
       <div onclick="buzz()" id="buzzer"></div>
     </div>
     <script>
       const socket = io();
-
-      socket.on(`playerCount`, function (count) {
-        document.getElementById("players").innerHTML =
-          count.totalPlayers + " Connected!";
-      });
+      let playerName = prompt("What's your name?");
+      socket.emit("playerJoined", playerName);
 
       function buzz() {
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
 
         // Send time to backend!
+        //todo;
       }
     </script>
   </body>
