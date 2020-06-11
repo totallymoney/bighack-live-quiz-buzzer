@@ -2,6 +2,9 @@
   "name": "buzzer",
   "version": "0.0.1",
   "description": "TM Hackathon Winner!",
+  "scripts": {
+    "start": "node ."
+  },
   "dependencies": {
     "express": "^4.15.2",
     "express-less": "^0.1.0",
