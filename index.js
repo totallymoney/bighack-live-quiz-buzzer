@@ -16,21 +16,25 @@ let totalPlayers = 0;
 io.on("connection", (socket) => {
   console.log(`a played connected 🤽‍♀️`);
   totalPlayers++;
+  updateClientsAboutPlayerCount(io, totalPlayers);
   socket.on("disconnect", () => {
     totalPlayers--;
     console.log(`a player disconnected`);
+    updateClientsAboutPlayerCount(io, totalPlayers);
   });
 
   socket.on(`unlock`, (msg) => {
     console.log("🔓");
     io.emit(`unlockButton`);
   });
-
-  io.emit(`playerCount`, {
-    totalPlayers,
-  });
 });
 
 http.listen(3000, () => {
   console.log("👂 on *:3000 🚀 🚀 🚀");
 });
+
+const updateClientsAboutPlayerCount = (io, totalPlayers) => {
+  io.emit(`playerCount`, {
+    totalPlayers,
+  });
+};
