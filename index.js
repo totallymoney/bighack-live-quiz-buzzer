@@ -19,10 +19,8 @@ io.on("connection", (socket) => {
     io.emit(`unlockButton`);
   });
 
-  socket.on(`playerJoined`, (player) => {
-    console.log("A played connected 🤽‍♀️ :" + player);
-    players.push(player);
-    io.emit(`updatePlayers`, players);
+  socket.on(`buzzed`, (player) => {
+    console.log("A played buzzed! ⛑ :" + JSON.stringify(player));
   });
 });
 

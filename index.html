@@ -11,20 +11,38 @@
     <link rel="stylesheet" href="/less-css/styles.css" />
   </head>
   <body>
-    <div class="center">
-      <div onclick="buzz()" id="buzzer"></div>
-    </div>
+    <p id="welcome"></p>
+
+    <div class="center"><p>Waiting for host...</p></div>
     <script>
       const socket = io();
+      let startTime = 0;
+
+      // Welcome Player
       let playerName = prompt("What's your name?");
+      document.getElementById("welcome").innerText = `Hello, ${playerName} 👋`;
       socket.emit("playerJoined", playerName);
 
+      // Show the Button
+      socket.on("unlockButton", () => {
+        startTime = Date.now();
+        document.querySelector(".center").innerHTML =
+          '<div onclick="buzz()" id="buzzer"></div>';
+      });
+
       function buzz() {
+        let endTime = Date.now();
+        playSound();
+
+        // Send time taken to express!
+        let response = {};
+        response[playerName] = endTime - startTime;
+        socket.emit("buzzed", response);
+      }
+
+      function playSound() {
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
-
-        // Send time to backend!
-        //todo;
       }
     </script>
   </body>
