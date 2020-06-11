@@ -33,16 +33,18 @@
 
       // Update the scores
       socket.on("updateScores", (playerScores) => {
-        console.log("got scores", playerScores);
-
-        const sortedPlayerScores = playerScores.sort((a, b) =>
-          a.last_nom > b.last_nom ? 1 : b.last_nom > a.last_nom ? -1 : 0
-        );
         const scoreTable = document.getElementById("playerScores");
         scoreTable.innerHTML = "";
-        for (let player of playerScores) {
-          var li = document.createElement("li");
-          li.appendChild(document.createTextNode(`${JSON.stringify(player)}`));
+        for (const [i, player] of playerScores.entries()) {
+          const li = document.createElement("li");
+
+          li.appendChild(
+            document.createTextNode(
+              `${i === 0 ? "👑 " : ""} ${Object.keys(player)[0]} : ${
+                Object.values(player)[0]
+              }`
+            )
+          );
           scoreTable.appendChild(li);
         }
       });
