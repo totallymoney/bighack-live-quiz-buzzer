@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-let players = [];
+let playerScores = [];
 io.on("connection", (socket) => {
   socket.on(`unlock`, (msg) => {
     console.log("🔓");
@@ -20,7 +20,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on(`buzzed`, (player) => {
-    console.log("A played buzzed! ⛑ :" + JSON.stringify(player));
+    console.log("A player buzzed! ⛑ :" + JSON.stringify(player));
+    playerScores.push(player);
+    io.emit(`updateScored`);
   });
 });
 
