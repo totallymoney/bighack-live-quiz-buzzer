@@ -3,9 +3,14 @@
 @color: #f74d4d;
 @color2: #f86569;
 @dropColor: #e24f4f;
+@white: #fff;
 
 body {
   background: #333;
+
+  h1 {
+    color: @white;
+  }
 
   .center {
     left: 50%;
@@ -27,7 +32,10 @@ body {
   text-align: center;
   cursor: pointer;
   border-radius: 50%;
+  font-size: 40px;
   background: @color;
+  color: @white;
+  user-select: none;
 
   background-image: -webkit-gradient(
     linear,

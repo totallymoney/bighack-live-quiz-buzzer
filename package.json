@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.15.2",
     "express-less": "^0.1.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "socket.io": "^2.3.0"
   }
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Let's buzz</title>
+    <link rel="stylesheet" href="/less-css/styles.css" />
+    <script src="https://unpkg.com/tone"></script>
+  </head>
+  <body>
+    <div class="center">
+      <div onclick="buzz()" id="buzzer">GO!</div>
+    </div>
+    <script>
+      function buzz() {
+        var synth = new Tone.Synth().toMaster();
+        synth.triggerAttackRelease("C4", "8n");
+      }
+    </script>
+  </body>
+</html>
