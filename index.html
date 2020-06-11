@@ -27,7 +27,7 @@
       socket.on("unlockButton", () => {
         startTime = Date.now();
         document.querySelector(".center").innerHTML =
-          '<div onclick="buzz()" id="buzzer"></div>';
+          '<button onclick="buzz()" id="buzzer"></button>';
       });
 
       function buzz() {
@@ -38,6 +38,9 @@
         let response = {};
         response[playerName] = endTime - startTime;
         socket.emit("buzzed", response);
+
+        // Disable the button
+        document.getElementById("buzzer").setAttribute("disabled", "disabled");
       }
 
       function playSound() {

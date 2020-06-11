@@ -11,18 +11,21 @@ app.get("/admin", (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
-
 let playerScores = [];
 io.on("connection", (socket) => {
   socket.on(`unlock`, (msg) => {
     console.log("🔓");
+    playerScores = [];
     io.emit(`unlockButton`);
   });
 
   socket.on(`buzzed`, (player) => {
     console.log("A player buzzed! ⛑ :" + JSON.stringify(player));
+
     playerScores.push(player);
-    io.emit(`updateScores`);
+    const sortedScores = playerScores.sort((a, b) => a[1] - b[1]);
+
+    io.emit(`updateScores`, sortedScores);
   });
 });
 

@@ -11,7 +11,7 @@
     ></script>
   </head>
   <body>
-    <div id="playerList"></div>
+    <ul id="playerScores"></ul>
 
     <div class="center">
       <button onclick="buzz()" id="buzzer">Start</button>
@@ -31,15 +31,24 @@
       let ongoing = false;
       const socket = io();
 
-      // socket.on("updatePlayers", function (players) {
-      //   const playerText = players.join("<br />");
-      //   document.getElementById("playerList").innerHTML = playerText;
-      // });
+      // Update the scores
+      socket.on("updateScores", (playerScores) => {
+        console.log("got scores", playerScores);
+
+        const sortedPlayerScores = playerScores.sort((a, b) =>
+          a.last_nom > b.last_nom ? 1 : b.last_nom > a.last_nom ? -1 : 0
+        );
+        const scoreTable = document.getElementById("playerScores");
+        scoreTable.innerHTML = "";
+        for (let player of playerScores) {
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode(`${JSON.stringify(player)}`));
+          scoreTable.appendChild(li);
+        }
+      });
 
       function buzz() {
         const buzzer = document.getElementById("buzzer");
-        // buzzer.setAttribute("disabled", "disabled");
-        // buzzer.innerText = "";
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
         socket.emit("unlock");
