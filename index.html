@@ -12,15 +12,25 @@
   </head>
   <body>
     <p id="welcome"></p>
-
-    <div class="center"><p>Waiting for host...</p></div>
+    <div class="center">
+      <p>
+        Hello 👋,<br />
+        A buzzer 🚨 will appear once the game starts...
+      </p>
+    </div>
+    <footer></footer>
     <script>
       const socket = io();
       let startTime = 0;
 
       // Welcome Player
-      let playerName = prompt("What's your name?");
-      document.getElementById("welcome").innerText = `Hello, ${playerName} 👋`;
+      let playerName = prompt("What's your name?") || "Zombie";
+
+      const playerAvatar = `https://avatars.dicebear.com/api/gridy/${playerName}.svg`;
+      document.getElementById(
+        "welcome"
+      ).innerHTML = `<img src=${playerAvatar} /> ${playerName}`;
+
       socket.emit("playerJoined", playerName);
 
       // Show the Button
@@ -28,6 +38,11 @@
         startTime = Date.now();
         document.querySelector(".center").innerHTML =
           '<button onclick="buzz()" id="buzzer"></button>';
+      });
+
+      socket.on("updatePlayers", (count) => {
+        playSound();
+        document.querySelector("footer").innerHTML = count + " players online";
       });
 
       function buzz() {
@@ -43,7 +58,7 @@
         document.getElementById("buzzer").setAttribute("disabled", "disabled");
       }
 
-      function playSound() {
+      function playSound(sound = "C4") {
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
       }

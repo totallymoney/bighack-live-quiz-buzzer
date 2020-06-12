@@ -10,6 +10,9 @@
 body {
   background: @black;
   color: @white;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
 
   h1,
   p {
@@ -18,9 +21,23 @@ body {
   footer {
     position: fixed;
     bottom: 0;
+    box-sizing: border-box;
+    padding: 16px;
     display: flex;
     justify-content: flex-end;
     width: 100%;
+  }
+
+  #welcome {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    img {
+      border-radius: 50%;
+      height: 62px;
+      width: 62px;
+      margin: 0 16px;
+    }
   }
 
   ul {
@@ -62,11 +79,14 @@ body {
   }
 
   .center {
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    margin-left: -@size / 2;
-    margin-top: -@size / 2;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     #buzzer {
       .bigRedButton(@size, @dropSize, @color, @color2, @dropColor);

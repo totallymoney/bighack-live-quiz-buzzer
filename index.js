@@ -12,7 +12,15 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 let playerScores = [];
+let totalPlayers = 0;
 io.on("connection", (socket) => {
+  totalPlayers++;
+  updatePlayers(io, totalPlayers);
+  socket.on("disconnect", () => {
+    totalPlayers--;
+    updatePlayers(io, totalPlayers);
+  });
+
   socket.on(`unlock`, (msg) => {
     console.log("🔓");
     playerScores = [];
@@ -32,3 +40,7 @@ io.on("connection", (socket) => {
 http.listen(8080, () => {
   console.log("👂 on *:8080 🚀 🚀 🚀");
 });
+
+function updatePlayers(io, players) {
+  io.emit(`updatePlayers`, players);
+}
