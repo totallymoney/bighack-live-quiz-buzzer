@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
     unlockTimestamp = Date.now();
     playerScores = [];
     io.emit(`unlockButton`);
+    io.emit(`updateScores`, playerScores);
   });
 
   socket.on(`buzzed`, () => {
