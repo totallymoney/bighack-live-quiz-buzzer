@@ -48,7 +48,12 @@
         button: () => {
           document.querySelector(".center").innerHTML = `<button ${
             state.buttonUnlocked ? "" : "disabled"
-          } onclick="buzz()" id="buzzer"></button>`;
+          } onclick="buzz()" id="buzzer"></button>
+        ${
+          state.buttonUnlocked
+            ? ""
+            : "<p>🔒! Waiting for the next question..</p>"
+        }`;
         },
       };
 
