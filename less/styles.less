@@ -6,13 +6,15 @@
 @white: #fff;
 @black: #030301;
 @radicalred: #ff4365;
+@blue: #0075a2;
 
 body {
-  background: @black;
+  background: @blue;
   color: @white;
   font-size: 18px;
   padding: 0;
   margin: 0;
+  transition: 0.35s all ease-in-out;
 
   h1,
   p {
@@ -26,6 +28,35 @@ body {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+  }
+
+  #inputContainer {
+    margin: 16px;
+    z-index: 333333;
+    display: flex;
+    align-items: center;
+  }
+
+  #inputContainer input {
+    width: 100%;
+    padding: 0 5px;
+    border: none;
+    padding: 16px;
+    font-size: 22px;
+    outline: 0;
+    box-shadow: none;
+    border-radius: 8px;
+  }
+
+  #inputContainer button {
+    font-size: 41px;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    opacity: 0;
+    transition: 0.25s opacity ease;
   }
 
   #welcome {

@@ -11,13 +11,8 @@
     <link rel="stylesheet" href="/less-css/styles.css" />
   </head>
   <body>
-    <p id="welcome"></p>
-    <div class="center">
-      <p>
-        Hello 👋,<br />
-        A buzzer 🚨 will appear once the game starts...
-      </p>
-    </div>
+    <section id="welcome"></section>
+    <div class="center"></div>
     <footer></footer>
     <script>
       const socket = io();
@@ -31,10 +26,23 @@
       };
 
       const render = {
+        namePrompt: () => {
+          document.querySelector(
+            ".center"
+          ).innerHTML = `<div onchange="nameChanged()" id="inputContainer"><input id="inputField" placeholder="Enter a name" required autofocus /><button onclick="nameSubmitted()">👌</button></div>`;
+
+          document
+            .getElementById("inputField")
+            .addEventListener("input", nameChanged);
+        },
         welcome: () => {
           document.getElementById(
             "welcome"
-          ).innerHTML = `<img src=${state.playerAvatar} /> ${state.playerName}`;
+          ).innerHTML = ` <img src=${state.playerAvatar} /> ${state.playerName}`;
+
+          document.querySelector(
+            ".center"
+          ).innerHTML = ` <p>  Hello 👋,<br /> A buzzer 🚨 will appear once the game starts... </p>`;
         },
         button: () => {
           document.querySelector(".center").innerHTML = `<button ${
@@ -57,10 +65,11 @@
 
       // Welcome Player
       function join() {
-        state.playerName = prompt(state.welcomeMessage) || "Joe";
-        state.playerAvatar = `https://avatars.dicebear.com/api/gridy/${state.playerName}.svg`;
-        socket.emit("playerJoined", state.playerName);
-        render.welcome();
+        render.namePrompt();
+        //state.playerName = prompt(state.welcomeMessage) || "Joe";
+        //state.playerAvatar = `https://avatars.dicebear.com/api/gridy/${state.playerName}.svg`;
+        //socket.emit("playerJoined", state.playerName);
+        //render.welcome();
       }
 
       function buzz() {
@@ -73,6 +82,20 @@
         // Disable the button
         state.buttonUnlocked = false;
         render.button();
+      }
+
+      function nameChanged({ target: { value } }) {
+        if (value.trim() !== "" && value.length > 2) {
+          document.querySelector("#inputContainer button").style.opacity = "1";
+          state.playerName = value;
+          state.playerAvatar = `https://avatars.dicebear.com/api/gridy/${value}.svg`;
+        }
+      }
+
+      function nameSubmitted() {
+        document.body.style.backgroundColor = "#030301";
+        socket.emit("playerJoined", state.playerName);
+        render.welcome();
       }
 
       function playSound(sound = "C4") {
