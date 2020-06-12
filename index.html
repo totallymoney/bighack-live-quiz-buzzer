@@ -18,6 +18,7 @@
       const socket = io();
 
       const state = {
+        id: "",
         playerName: "",
         playerAvatar: "",
         unlockedTimestamp: 0,
@@ -51,6 +52,17 @@
         },
       };
 
+      // Respond to pings
+      socket.on("ping", (latency) => {
+        socket.emit("pingBack", state.id);
+        console.log("latency: ", latency);
+      });
+
+      socket.on("id", (id) => {
+        console.log("got id, ", id);
+        state.id = id;
+      });
+
       // Show the Button
       socket.on("unlockButton", () => {
         state.unlockedTimestamp = Date.now();
@@ -66,10 +78,6 @@
       // Welcome Player
       function join() {
         render.namePrompt();
-        //state.playerName = prompt(state.welcomeMessage) || "Joe";
-        //state.playerAvatar = `https://avatars.dicebear.com/api/gridy/${state.playerName}.svg`;
-        //socket.emit("playerJoined", state.playerName);
-        //render.welcome();
       }
 
       function buzz() {
