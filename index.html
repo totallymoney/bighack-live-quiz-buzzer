@@ -53,9 +53,9 @@
       };
 
       // Respond to pings
-      socket.on("ping", (latency) => {
-        socket.emit("pingBack", state.id);
-        console.log("latency: ", latency);
+      socket.on('ping', ({ latency }) => {
+        socket.emit('pingBack')
+        console.log('latency: ', latency)
       });
 
       socket.on("id", (id) => {
