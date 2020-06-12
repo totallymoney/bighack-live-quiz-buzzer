@@ -27,34 +27,50 @@
     </footer>
 
     <script>
-      let timer = 600000;
-      let ongoing = false;
       const socket = io();
+      
+      const state = {
+        timer: 600000,
+        ongoing: false,
+        playerScores: []
+      }
+      
+      const render = {
+        scores: () => {
+          const scoreTable = document.getElementById("playerScores");
+          scoreTable.innerHTML = "";
+          for (const [i, player] of state.playerScores.entries()) {
+            const li = document.createElement("li");
+
+            li.appendChild(
+              document.createTextNode(
+                `${i === 0 ? "👑 " : ""} ${Object.keys(player)[0]} : ${
+                  Object.values(player)[0]
+                }`
+              )
+            );
+            scoreTable.appendChild(li);
+          }
+        }
+      }
 
       // Update the scores
       socket.on("updateScores", (playerScores) => {
-        const scoreTable = document.getElementById("playerScores");
-        scoreTable.innerHTML = "";
-        for (const [i, player] of playerScores.entries()) {
-          const li = document.createElement("li");
-
-          li.appendChild(
-            document.createTextNode(
-              `${i === 0 ? "👑 " : ""} ${Object.keys(player)[0]} : ${
-                Object.values(player)[0]
-              }`
-            )
-          );
-          scoreTable.appendChild(li);
-        }
+        state.playerScores = playerScores;
+        render.scores();
       });
 
       function buzz() {
-        const buzzer = document.getElementById("buzzer");
+        socket.emit("unlock");
+        playSound();
+      }
+
+      function playSound() {
         var synth = new Tone.Synth().toMaster();
         synth.triggerAttackRelease("C4", "8n");
-        socket.emit("unlock");
       }
+
+      window.state = state;
     </script>
   </body>
 </html>

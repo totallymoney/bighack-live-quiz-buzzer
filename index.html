@@ -20,48 +20,66 @@
     </div>
     <footer></footer>
     <script>
-      const socket = io();
-      let startTime = 0;
+            const socket = io();
 
-      // Welcome Player
-      let playerName = prompt("What's your name?") || "Zombie";
+            const state = {
+              playerName: '',
+              unlockedTimestamp: 0,
+              buttonUnlocked: false
+            };
 
-      const playerAvatar = `https://avatars.dicebear.com/api/gridy/${playerName}.svg`;
-      document.getElementById(
-        "welcome"
-      ).innerHTML = `<img src=${playerAvatar} /> ${playerName}`;
+            const render = {
+              welcome: () => {
+                document.getElementById("welcome").innerText = `Hello, ${state.playerName} 👋`;
+              },
+              button: () => {
+                document.querySelector(".center").innerHTML =
+                  `<button ${state.buttonUnlocked ? '': 'disabled'} onclick="buzz()" id="buzzer"></button>`;
+              }
+            }
 
-      socket.emit("playerJoined", playerName);
+            // Show the Button
+            socket.on("unlockButton", () => {
+              state.unlockedTimestamp = Date.now();
+              state.buttonUnlocked = true;
+              render.button();
+            });
 
-      // Show the Button
-      socket.on("unlockButton", () => {
-        startTime = Date.now();
-        document.querySelector(".center").innerHTML =
-          '<button onclick="buzz()" id="buzzer"></button>';
-      });
+      <<<<<<< HEAD
+            socket.on("updatePlayers", (count) => {
+              playSound();
+              document.querySelector("footer").innerHTML = count + " players online";
+            });
+      =======
+            // Welcome Player
+            function join() {
+              state.playerName = prompt("What's your name?");
+              socket.emit("playerJoined", state.playerName);
+              render.welcome();
+            }
+      >>>>>>> 9c5d210d8dab6b4ea668e426c1147335ed971234
 
-      socket.on("updatePlayers", (count) => {
-        playSound();
-        document.querySelector("footer").innerHTML = count + " players online";
-      });
+            function buzz() {
+              const response = {
+                [state.playerName]: Date.now() - state.unlockedTimestamp
+              };
+              playSound();
+              // Send time taken to express!
+              socket.emit("buzzed", response);
+              // Disable the button
+              state.buttonUnlocked = false;
+              render.button();
+            }
 
-      function buzz() {
-        let endTime = Date.now();
-        playSound();
+            function playSound(sound = "C4") {
+              var synth = new Tone.Synth().toMaster();
+              synth.triggerAttackRelease("C4", "8n");
+            }
 
-        // Send time taken to express!
-        let response = {};
-        response[playerName] = endTime - startTime;
-        socket.emit("buzzed", response);
+            join()
 
-        // Disable the button
-        document.getElementById("buzzer").setAttribute("disabled", "disabled");
-      }
-
-      function playSound(sound = "C4") {
-        var synth = new Tone.Synth().toMaster();
-        synth.triggerAttackRelease("C4", "8n");
-      }
+            window.state = state;
+            window.render = render;
     </script>
   </body>
 </html>
