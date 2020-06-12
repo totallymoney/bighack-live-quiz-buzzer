@@ -24,36 +24,35 @@ let playerScores = [];
 let totalPlayers = 0;
 
 io.on("connection", (socket) => {
-  let pingTimestamp = 0;
+  let _pingTimestamp = 0;
+  const _id = uuid();
+  const _player = {
+    name: '',
+    latency: 0
+  }
+
   totalPlayers++;
   updatePlayers(io, totalPlayers);
   socket.on("disconnect", () => {
+    delete players[_id];
     totalPlayers--;
     updatePlayers(io, totalPlayers);
   });
 
   socket.on('join', (name) => {
-    const id = uuid();
-    console.log('new id: ', id);
-    const player = {
-      name: name,
-      latency: 0
-    }
-    players[id] = player;
-    socket.emit('id', id);
-    pingTimestamp = Date.now();
-    socket.emit('ping', 0)
+    _player.name = name;
+    players[_id] = _player;
+    socket.emit('id', _id);
+    _pingTimestamp = Date.now();
+    socket.emit('ping', { id: _id, latency: 0 })
   })
 
-  socket.on('pingBack', (id) => {
-    if (players[id]) {
-      players[id].latency = Date.now() - pingTimestamp;
-      setTimeout(() => {
-        pingTimestamp = Date.now();
-        socket.emit('ping', players[id].latency);  
-      }, 1000);
-      console.log('latency ', players[id].latency);
-    }
+  socket.on('pingBack', () => {
+    _player.latency = Date.now() - _pingTimestamp;
+    setTimeout(() => {
+      _pingTimestamp = Date.now();
+      socket.emit('ping', { latency: _player.latency });  
+    }, 1000);
   })
 
   socket.on(`unlock`, (msg) => {
