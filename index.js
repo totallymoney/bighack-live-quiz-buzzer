@@ -21,6 +21,7 @@ function uuid() {
 
 let players = {};
 let playerScores = [];
+let unlockTimestamp = 0;
 
 io.on("connection", (socket) => {
   let _pingTimestamp = 0;
@@ -29,8 +30,6 @@ io.on("connection", (socket) => {
     name: '',
     latency: 0
   }
-
-  socket.emit('id', _id);
 
   socket.on("disconnect", () => {
     delete players[_id];
@@ -41,7 +40,7 @@ io.on("connection", (socket) => {
     _player.name = name;
     players[_id] = _player;
     _pingTimestamp = Date.now();
-    socket.emit('ping', { id: _id, latency: 0 });
+    socket.emit('ping', { latency: 0 });
     updatePlayers();
   })
 
@@ -55,14 +54,17 @@ io.on("connection", (socket) => {
 
   socket.on(`unlock`, (msg) => {
     console.log("🔓");
+    unlockTimestamp = Date.now();
     playerScores = [];
     io.emit(`unlockButton`);
   });
 
-  socket.on(`buzzed`, (player) => {
-    console.log("A player buzzed! ⛑ :" + JSON.stringify(player));
-
-    playerScores.push(player);
+  socket.on(`buzzed`, () => {
+    const buzzEvent = {
+      [_player.name]: Date.now() - unlockTimestamp - _player.latency
+    }
+    console.log("A player buzzed! ⛑ :" + JSON.stringify(buzzEvent));
+    playerScores.push(buzzEvent)
     const sortedScores = playerScores.sort((a, b) => a[1] - b[1]);
 
     io.emit(`updateScores`, sortedScores);

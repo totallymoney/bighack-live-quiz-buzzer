@@ -18,10 +18,8 @@
       const socket = io();
 
       const state = {
-        id: "",
         playerName: "",
         playerAvatar: "",
-        unlockedTimestamp: 0,
         buttonUnlocked: false,
         welcomeMessage: `Enter a player name to identify yourself, or click cancel to choose a random name`,
       };
@@ -60,17 +58,11 @@
       // Respond to pings
       socket.on("ping", ({ latency }) => {
         socket.emit("pingBack");
-        console.log("latency: ", latency);
-      });
-
-      socket.on("id", (id) => {
-        console.log("got id, ", id);
-        state.id = id;
+        console.info("latency: ", latency);
       });
 
       // Show the Button
       socket.on("unlockButton", () => {
-        state.unlockedTimestamp = Date.now();
         state.buttonUnlocked = true;
         render.button();
       });
@@ -85,15 +77,10 @@
       }
 
       function buzz() {
-        const response = {
-          [state.playerName]: Date.now() - state.unlockedTimestamp,
-        };
-        playSound();
-        // Send time taken to express!
-        socket.emit("buzzed", response);
-        // Disable the button
+        socket.emit("buzzed");
         state.buttonUnlocked = false;
         render.button();
+        playSound();
       }
 
       function nameChanged({ target: { value } }) {
@@ -107,7 +94,6 @@
       function nameSubmitted() {
         document.body.style.backgroundColor = "#030301";
         socket.emit("join", state.playerName);
-        socket.emit("playerJoined", state.playerName);
         render.welcome();
       }
 
