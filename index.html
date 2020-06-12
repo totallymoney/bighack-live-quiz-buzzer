@@ -53,9 +53,9 @@
       };
 
       // Respond to pings
-      socket.on('ping', ({ latency }) => {
-        socket.emit('pingBack')
-        console.log('latency: ', latency)
+      socket.on("ping", ({ latency }) => {
+        socket.emit("pingBack");
+        console.log("latency: ", latency);
       });
 
       socket.on("id", (id) => {
@@ -96,12 +96,12 @@
           document.querySelector("#inputContainer button").style.opacity = "1";
           state.playerName = value;
           state.playerAvatar = `https://avatars.dicebear.com/api/gridy/${value}.svg`;
-          socket.emit("join", state.playerName);
         }
       }
 
       function nameSubmitted() {
         document.body.style.backgroundColor = "#030301";
+        socket.emit("join", state.playerName);
         socket.emit("playerJoined", state.playerName);
         render.welcome();
       }
