@@ -31,8 +31,6 @@ io.on("connection", (socket) => {
     latency: 0
   }
 
-  socket.emit('id', _id);
-
   socket.on("disconnect", () => {
     delete players[_id];
     updatePlayers();
@@ -42,7 +40,7 @@ io.on("connection", (socket) => {
     _player.name = name;
     players[_id] = _player;
     _pingTimestamp = Date.now();
-    socket.emit('ping', { id: _id, latency: 0 });
+    socket.emit('ping', { latency: 0 });
     updatePlayers();
   })
 
@@ -61,13 +59,12 @@ io.on("connection", (socket) => {
     io.emit(`unlockButton`);
   });
 
-  socket.on(`buzzed`, (player) => {
-    console.log("A player buzzed! ⛑ :" + JSON.stringify(player));
-
-    //playerScores.push(player);
-    playerScores.push({
+  socket.on(`buzzed`, () => {
+    const buzzEvent = {
       [_player.name]: Date.now() - unlockTimestamp - _player.latency
-    })
+    }
+    console.log("A player buzzed! ⛑ :" + JSON.stringify(buzzEvent));
+    playerScores.push(buzzEvent)
     const sortedScores = playerScores.sort((a, b) => a[1] - b[1]);
 
     io.emit(`updateScores`, sortedScores);
