@@ -21,7 +21,6 @@ function uuid() {
 
 let players = {};
 let playerScores = [];
-let totalPlayers = 0;
 
 io.on("connection", (socket) => {
   let _pingTimestamp = 0;
@@ -31,20 +30,19 @@ io.on("connection", (socket) => {
     latency: 0
   }
 
-  totalPlayers++;
-  updatePlayers(io, totalPlayers);
+  socket.emit('id', _id);
+
   socket.on("disconnect", () => {
     delete players[_id];
-    totalPlayers--;
-    updatePlayers(io, totalPlayers);
+    updatePlayers();
   });
 
   socket.on('join', (name) => {
     _player.name = name;
     players[_id] = _player;
-    socket.emit('id', _id);
     _pingTimestamp = Date.now();
-    socket.emit('ping', { id: _id, latency: 0 })
+    socket.emit('ping', { id: _id, latency: 0 });
+    updatePlayers();
   })
 
   socket.on('pingBack', () => {
@@ -75,6 +73,7 @@ http.listen(8080, () => {
   console.log("👂 on *:8080 🚀 🚀 🚀");
 });
 
-function updatePlayers(io, players) {
-  io.emit(`updatePlayers`, players);
+function updatePlayers() {
+  const  playerCount = Object.keys(players).length;
+  io.emit(`updatePlayers`, playerCount);
 }

@@ -92,10 +92,11 @@
       }
 
       function nameChanged({ target: { value } }) {
-        if (value.trim() !== "" && value.length > 2) {
+        if (value.trim() !== "") {
           document.querySelector("#inputContainer button").style.opacity = "1";
           state.playerName = value;
           state.playerAvatar = `https://avatars.dicebear.com/api/gridy/${value}.svg`;
+          socket.emit("join", state.playerName);
         }
       }
 
