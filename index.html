@@ -71,7 +71,6 @@
       });
 
       socket.on("updatePlayers", (count) => {
-        playSound();
         document.querySelector("footer").innerHTML = count + " players online";
       });
 
