@@ -16,25 +16,14 @@
     <div class="center">
       <button onclick="buzz()" id="buzzer">Start</button>
     </div>
-    <footer>
-      <div class="select">
-        ⏰
-        <select onchange="setTimer()" id="select">
-          <option selected value="600000">10 mins</option>
-          <option value="300000">5 mins</option>
-        </select>
-      </div>
-    </footer>
 
     <script>
       const socket = io();
-      
+
       const state = {
-        timer: 600000,
-        ongoing: false,
-        playerScores: []
-      }
-      
+        playerScores: [],
+      };
+
       const render = {
         scores: () => {
           const scoreTable = document.getElementById("playerScores");
@@ -51,8 +40,8 @@
             );
             scoreTable.appendChild(li);
           }
-        }
-      }
+        },
+      };
 
       // Update the scores
       socket.on("updateScores", (playerScores) => {
