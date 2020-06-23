@@ -8,14 +8,16 @@
       integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo="
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="/less-css/styles.css" />
+    <link rel="stylesheet" href="/quiz-buzzer/less-css/styles.css" />
   </head>
   <body>
     <section id="welcome"></section>
     <div class="center"></div>
     <footer></footer>
     <script>
-      const socket = io();
+      const socket = io({
+        path: '/quiz-buzzer/socket.io'
+      });
 
       const state = {
         playerName: "",

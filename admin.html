@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Let's buzz</title>
-    <link rel="stylesheet" href="/less-css/styles.css" />
+    <link rel="stylesheet" href="/quiz-buzzer/less-css/styles.css" />
     <script src="https://unpkg.com/tone"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
@@ -18,7 +18,9 @@
     </div>
 
     <script>
-      const socket = io();
+      const socket = io({
+        path: "/quiz-buzzer/socket.io"
+      });
 
       const state = {
         playerScores: [],

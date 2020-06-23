@@ -1,16 +1,24 @@
 const app = require("express")();
 const http = require("http").createServer(app);
 const expressLess = require("express-less");
-const io = require("socket.io")(http);
-app.use("/less-css", expressLess(__dirname + "/less"));
+const socketIo = require("socket.io");
+const router = require("express").Router();
 
-app.get("/admin", (req, res) => {
+const basePath = '/quiz-buzzer' // TODO: build proper config mechanism
+
+const io = socketIo(http, { path: `${basePath}/socket.io` });
+
+router.use("/less-css", expressLess(__dirname + "/less"));
+
+router.get("/admin", (req, res) => {
   res.sendFile(__dirname + "/admin.html");
 });
 
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
+
+app.use(basePath, router)
 
 function uuid() {
   return 'xxxxxxxx'.replace(/[xy]/g, function(c) {
