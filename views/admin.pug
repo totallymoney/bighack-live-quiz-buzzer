@@ -10,7 +10,9 @@ html
     div.center
       button(id='buzzer' onclick='buzz()')
     script.
-      const socket = io();
+      const socket = io({
+          path: `/quiz-buzzer/socket.io`
+        });
 
       const state = {
         playerScores: [],

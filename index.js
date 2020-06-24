@@ -2,7 +2,9 @@ const app = require("express")();
 const http = require("http").createServer(app);
 const config = require("./config");
 const routes = require("./routes.js");
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {
+  path: `${config.baseURL}/socket.io`
+});
 
 app.use(config.baseURL, routes);
 app.set("view engine", "pug");
