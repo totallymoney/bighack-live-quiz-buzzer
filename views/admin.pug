@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Let's buzz</title>
-    <link rel="stylesheet" href="/quiz-buzzer/less-css/styles.css" />
-    <script src="https://unpkg.com/tone"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
-      integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo="
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body>
-    <ul id="playerScores"></ul>
-
-    <div class="center">
-      <button onclick="buzz()" id="buzzer">Start</button>
-    </div>
-
-    <script>
-      const socket = io({
-        path: "/quiz-buzzer/socket.io"
-      });
+html
+  head
+    title= `Admin - Let's buzz`
+    script(src='https://unpkg.com/tone')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js')
+    style
+      include ../styles.css
+  body
+    ul#playerScores
+    div.center
+      button(id='buzzer' onclick='buzz()')
+    script.
+      const socket = io();
 
       const state = {
         playerScores: [],
@@ -62,6 +52,3 @@
       }
 
       window.state = state;
-    </script>
-  </body>
-</html>
